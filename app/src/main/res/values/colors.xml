@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="calc_btn_top">#F4F8FF</color>
+    <color name="calc_btn_bottom">#DCE8F6</color>
+    <color name="calc_btn_border_outer">#A9BACD</color>
+    <color name="calc_btn_border_inner">#F7FAFF</color>
+    <color name="calc_btn_pressed_top">#E6EEF9</color>
+    <color name="calc_btn_pressed_bottom">#C9DBF1</color>
+    <color name="calc_disp_top">#F8FBFF</color>
+    <color name="calc_disp_bottom">#E8F1FB</color>
+    <color name="calc_disp_border">#B5C6D9</color>
+    <color name="calc_text">#253041</color>
+
+</resources>
