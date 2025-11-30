@@ -19,8 +19,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         tvDisplay = findViewById(R.id.tvDisplay);
-        int[] digitIds = { R.id.btn0,R.id.btn1,R.id.btn2,R.id.btn3,R.id.btn4,R.id.btn5,R.id.btn6,R.id.btn7,R.id.btn8,R.id.btn9 };
-        for (int id : digitIds) findViewById(id).setOnClickListener(v -> appendDigit(((Button)v).getText().toString()));
+        int[] digitIds = {
+                R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4,
+                R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9
+        };
+        for (int id : digitIds) {
+            findViewById(id).setOnClickListener(v ->
+                    appendDigit(((Button) v).getText().toString()));
+        }
 
         findViewById(R.id.btnDot).setOnClickListener(v -> appendDot());
         findViewById(R.id.btnPlus).setOnClickListener(v -> setOperator("+"));
@@ -29,7 +35,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btnDiv).setOnClickListener(v -> setOperator("/"));
         findViewById(R.id.btnEq).setOnClickListener(v -> calculate());
         findViewById(R.id.btnC).setOnClickListener(v -> clearAll());
-        findViewById(R.id.btnCE).setOnClickListener(v -> { currentText = "0"; updateDisplay(); });
+        findViewById(R.id.btnCE).setOnClickListener(v -> {
+            currentText = "0";
+            updateDisplay();
+        });
         findViewById(R.id.btnBack).setOnClickListener(v -> backspace());
         findViewById(R.id.btnSign).setOnClickListener(v -> toggleSign());
         findViewById(R.id.btnSqrt).setOnClickListener(v -> sqrtOp());
@@ -38,20 +47,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void appendDigit(String d) {
-        if (justCalculated) { currentText = "0"; justCalculated = false; }
-        if (currentText.equals("0")) currentText = d;
-        else currentText += d;
+        if (justCalculated) {
+            currentText = "0";
+            justCalculated = false;
+        }
+        if (currentText.equals("0")) {
+            currentText = d;
+        } else {
+            currentText += d;
+        }
         updateDisplay();
     }
 
     private void appendDot() {
-        if (justCalculated) { currentText = "0"; justCalculated = false; }
-        if (!currentText.contains(".")) currentText += ".";
+        if (justCalculated) {
+            currentText = "0";
+            justCalculated = false;
+        }
+        if (!currentText.contains(".")) {
+            currentText += ".";
+        }
         updateDisplay();
     }
 
     private void setOperator(String op) {
-        if (pendingOperator != null && !justCalculated) calculate();
+        if (pendingOperator != null && !justCalculated) {
+            calculate();
+        }
         firstOperand = parse(currentText);
         pendingOperator = op;
         currentText = "0";
@@ -60,18 +82,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculate() {
-        if (pendingOperator == null || firstOperand == null) { justCalculated = true; return; }
+        if (pendingOperator == null || firstOperand == null) {
+            justCalculated = true;
+            return;
+        }
         double a = firstOperand;
         double b = parse(currentText);
         String r;
         switch (pendingOperator) {
-            case "+": r = format(a + b); break;
-            case "-": r = format(a - b); break;
-            case "*": r = format(a * b); break;
+            case "+":
+                r = format(a + b);
+                break;
+            case "-":
+                r = format(a - b);
+                break;
+            case "*":
+                r = format(a * b);
+                break;
             case "/":
-                if (b == 0.0) { showError(); return; }
-                r = format(a / b); break;
-            default: r = currentText;
+                if (b == 0.0) {
+                    showError();
+                    return;
+                }
+                r = format(a / b);
+                break;
+            default:
+                r = currentText;
         }
         currentText = r;
         firstOperand = null;
@@ -98,7 +134,8 @@ public class MainActivity extends AppCompatActivity {
         if (justCalculated) {
             justCalculated = false;
         }
-        if (currentText.length() <= 1 || (currentText.length() == 2 && currentText.startsWith("-"))) {
+        if (currentText.length() <= 1 ||
+                (currentText.length() == 2 && currentText.startsWith("-"))) {
             currentText = "0";
         } else {
             currentText = currentText.substring(0, currentText.length() - 1);
@@ -106,30 +143,34 @@ public class MainActivity extends AppCompatActivity {
         updateDisplay();
     }
 
-
     private void toggleSign() {
-        if (currentText.equals("0")) return;
-        if (currentText.startsWith("-")) currentText = currentText.substring(1);
-        else currentText = "-" + currentText;
+        if (currentText.equals("0")) {
+            return;
+        }
+        if (currentText.startsWith("-")) {
+            currentText = currentText.substring(1);
+        } else {
+            currentText = "-" + currentText;
+        }
         updateDisplay();
     }
 
     private void sqrtOp() {
         double v = parse(currentText);
-        if (v < 0) { showError(); return; }
+        if (v < 0) {
+            showError();
+            return;
+        }
         currentText = format(Math.sqrt(v));
         justCalculated = true;
         updateDisplay();
     }
-
     private double parse(String s) {
-        try { return Double.parseDouble(s); } catch (Exception e) { return 0.0; }
+        return CalculatorCore.parse(s);
     }
 
     private String format(double v) {
-        String s = String.valueOf(v);
-        if (s.endsWith(".0")) s = s.substring(0, s.length()-2);
-        return s;
+        return CalculatorCore.format(v);
     }
 
     private void showError() {
